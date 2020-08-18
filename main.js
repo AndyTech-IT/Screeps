@@ -1,8 +1,9 @@
 // roles 	= { 'scaut', 'harvester', 'worker', 'transport', 'old'}
-// actions 	= { 'scauting, 'harvest', 'work', 'transfer', 'idle', 'suicide' }
-// spawnID 	= 'id'
-// targetID = 'id'
-// sourceID = 'id'
+// actions 	= { 'scauting, 'harvest', 'withdraw', 'pickup', 'transfer', 'idle', 'suicide' }
+// spawnID 		= 'id'
+// targetID 	= 'id'
+// sourceID 	= 'id'
+// controllerID	= 'id'
 // partCost   MOVE: 50, WORK: 100, CARRY: 50, ATTACK: 80, RANGED_ATTACK: 150, HEAL: 250, CLAIM: 600, TOUGH: 10 
 
 const designer	= require('designer')
