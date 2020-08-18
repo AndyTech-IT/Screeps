@@ -13,16 +13,8 @@ const maxTransports 	= 1
 
 let maxCreepCost 		= home.energyCapacityAvailable
 
-let scautBody 		= []
-let harvesterBody 	= []
-let workerBody 		= []
-let transportBody 	= []
-
-
-designer.designScout()
-designer.designWorker()
-designer.designHarvester()
-designer.designTransport()
-
-
+let scautBody 		= designer.designScout(maxCreepCost)
+let harvesterBody 	= designer.designWorker(maxCreepCost)
+let workerBody 		= designer.designHarvester(maxCreepCost)
+let transportBody 	= designer.designTransport(maxCreepCost)
 
