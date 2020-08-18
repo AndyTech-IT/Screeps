@@ -1,20 +1,3 @@
-// roles 	= { 'scaut', 'harvester', 'worker', 'transport', 'old'}
-// actions 	= { 'scauting, 'harvest', 'work', 'transfer', 'idle', 'suicide' }
-// partCost   MOVE: 50, WORK: 100, CARRY: 50, ATTACK: 80, RANGED_ATTACK: 150, HEAL: 250, CLAIM: 600, TOUGH: 10 
-
-spawn 	= Game.spawns.Spawn1
-home 	= spawn.room
-
-const maxWorkers 		= 3
-const maxHarvesters 	= 2
-const maxTransports 	= 1
-
-let maxCreepCost 		= home.energyCapacityAvailable
-
-let scautBody 		= []
-let harvesterBody 	= []
-let workerBody 		= []
-let transportBody 	= []
 
 function designScout() {
 	let budget = maxCreepCost
@@ -79,38 +62,27 @@ function designHarvester() {
 	}
 }
 
-designScout()
-designWorker()
-designHarvester()
-console.log(harvesterBody)
+function designTransport() {
+	let budget = maxCreepCost
+	transprtBody = []
+	let carryParts 	= budget/2/BODYPART_COST[CARRY]
+	let moveParts 	= budget/3/BODYPART_COST[MOVE]
 
+	for (let i = 0; i < carryParts; i++) {
+		budget -= BODYPART_COST[CARRY]
+		transprtBody.push(CARRY)
+	}
+	for (let i = 0; i < moveParts; i++) { 
+		budget -= BODYPART_COST[MOVE] 
+		transprtBody.push(MOVE)
+	}
 
-
-function addRoom(room, range) {
-    if (!(room.name in Memory.rooms)) {
-        console.log(room, range)
-    	terrain = new Room.Terrain(room.name)
-    	sourcesData = []
-    	let sources = room.find(FIND_SOURCES)
-    	let minePoints = 0
-    	for (index in sources) {
-    			let minePointsCount = 0
-    			let X = sources[index].pos.x, Y = sources[index].pos.y
-    			for (let x = X-1; x <= X+1; x++) {
-    				for (let y = Y-1; y <= Y+1; y++) {
-    					if (terrain.get(x, y) != 1) 
-    						{ minePointsCount++ }
-    				}
-    			}
-    			sourcesData.push({ ID: sources[index].id ,minePointsCount })
-    			minePoints += minePointsCount
-    		}
-    	Memory.rooms[room.name] = {
-    		'sources' 	: sourcesData,
-    		'minePoints': minePoints,
-    		'range' 	: range
-    	}
-    }
+	for (let i=0; i < budget/BODYPART_COST[TOUGH]; i++) {
+		transprtBody.push(TOUGH)
+	}
 }
 
-
+modul.exports.designTransport 	= designTransport;
+modul.exports.designHarvester 	= designHarvester;
+modul.exports.designWorker 		= designWorker;
+modul.exports.designScout 		= designScout;
