@@ -76,34 +76,70 @@ function oldAction(creep) {
 
 
 // Controlls
-function harvesterAction(creep) {
+function scauting(creep) {
+	// In process...
+}
+
+function harvest(creep) {
+
+	const target = Game.objectById(creep.memory.targetID)
+
+	if (creep.harvest(target) == ERR_NOT_IN_RANGE) {
+		creep.moveTo(target)
+	}
+
+	if (creep.store.getFreeCapacity == 0) { // full
+		creep.memory.action = 'idle'
+		creep.memory.target = undefined
+	}
+}
+
+function withdraw(creep) {
+	// In progress
+}
+
+function work(creep) {
+
+	const target = Game.objectById(creep.memory.targetID)
+
+	if (creep.upgradeController(target) == ERR_NOT_IN_RANGE) {
+		creep.moveTo(target)
+	}
+
+	if (creep.store.getCapacity == 0) { // empty
+		creep.memory.action = 'idle'
+		creep.memory.target = undefined
+	}
+}
 	
+function transfer(creep) {
+	
+	const target = Game.objectById(creep.memory.targetID)
+
+	if (creep.transfer(target) == ERR_NOT_IN_RANGE) {
+		creep.moveTo(target)
+	}
+
+	if (creep.store.getCapacity == 0) { // empty
+		creep.memory.action = 'idle'
+		creep.memory.target = undefined
+	}
 }
 
-function transportAction(creep) {
-
-}
-
-function workerAction(creep) {
-
-}
-
-function scautAction(creep) {
-	// In progress...
-}
-
-function oldControll(creep) {
+function suicide(creep) {
+	// body...
 }
 
 // Functions dicts
 const controlls = {
-	'harvester'	: harvesterControll,
-	'transport'	: transportControll,
-	'worker' 	: workerControll,
-	'scaut' 	: scautControll,
-	'old' 		: oldControll
+	'scauting'	: scauting,
+	'harvest'	: harvest,
+	'withdraw' 	: withdraw,
+	'work' 		: work,
+	'pickup' 	: pickup,
+	'transfer' 	: transfer,
+	'suicide' 	: suicide
 }
-
 const actions = {
 	'harvester'	: harvesterAction,
 	'transport'	: transportAction,
@@ -114,4 +150,4 @@ const actions = {
 
 
 exports.getAction 	= function(creep) { actions[creep.memory.role](creep) }
-exports.controll 	= function(creep) { controlls[creep.memory.role](creep) };
+exports.controll 	= function(creep) { controlls[creep.memory.action](creep); };
