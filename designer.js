@@ -86,7 +86,7 @@ function designTransport(budget) {
 	return transprtBody
 }
 
-modul.exports.designTransport 	= designTransport;
-modul.exports.designHarvester 	= designHarvester;
-modul.exports.designWorker 		= designWorker;
-modul.exports.designScout 		= designScout;
+exports.designTransport 	= designTransport;
+exports.designHarvester 	= designHarvester;
+exports.designWorker 		= designWorker;
+exports.designScout 		= designScout;
