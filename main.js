@@ -1,5 +1,5 @@
 // roles 	= { 'scaut', 'harvester', 'worker', 'transport', 'old'}
-// actions 	= { 'scauting, 'harvest', 'withdraw', 'pickup', 'transfer', 'idle', 'suicide' }
+// actions 	= { 'scauting', 'harvest', 'withdraw', 'work', 'pickup', 'transfer', 'idle', 'suicide' }
 // spawnID 		= 'id'
 // targetID 	= 'id'
 // sourceID 	= 'id'
@@ -31,9 +31,11 @@ if(Game.cpu.bucket > 5000) {
 function main() {
 	const freeCreeps = home.find(FIND_MY_CREEPS, 
 							{filter: {memory: {action: 'idle'}}})
-	for (i in freeCreeps) {
-		ai.getAction(freeCreeps[i])
-	}
+	const busyCreeps = home.find(FIND_MY_CREEPS,
+							{filter: {memory: {action: !'idle'}}})
+
+	for (i in freeCreeps) { ai.getAction(freeCreeps[i]) }
+	for (i in busyCreeps) { ai.control(busyCreeps[i]) }
 }
 
 exports.loop = main;
