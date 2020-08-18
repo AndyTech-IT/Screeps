@@ -88,5 +88,7 @@ function controll() {
 
 
 
-exports.getAction 	= actions[creep.memory.role](creep);
+exports.getAction 	= function(creep) {
+	actions[creep.memory.role](creep)
+}
 exports.controll 	= controll;
