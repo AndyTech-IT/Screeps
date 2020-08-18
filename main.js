@@ -29,10 +29,10 @@ if(Game.cpu.bucket > 5000) {
 }
 
 function main() {
-	const freeCreeps = room.find(room.find(FIND_MY_CREEPS, 
-							{filter: {memory: {action: 'idle'}}}))
+	const freeCreeps = home.find(FIND_MY_CREEPS, 
+							{filter: {memory: {action: 'idle'}}})
 	for (i in freeCreeps) {
-		console.log(i)
+		ai.getAction(freeCreeps[i])
 	}
 }
 
