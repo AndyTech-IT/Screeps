@@ -1,5 +1,5 @@
-// roles 	= { 'scaut', 'harvester', 'worker', 'transport', 'old'}
-// actions 	= { 'scauting', 'harvest', 'withdraw', 'work', 'pickup', 'transfer', 'idle', 'suicide' }
+// roles 	= { 'scaut', 'harvester', 'worker', 'transport'}
+// actions 	= { 'scauting', 'harvest', 'withdraw', 'work', 'pickup', 'transfer', 'renew' }
 // spawnID 		= 'id'
 // targetID 	= 'id'
 // sourceID 	= 'id'
@@ -35,7 +35,7 @@ function main() {
 	{ filter: function(creep) { return creep.memory.action != 'idle' }})
 
 	for (i in freeCreeps) { ai.getAction(freeCreeps[i]) }
-	for (i in busyCreeps) { ai.control(busyCreeps[i]) }
+	for (i in busyCreeps) { ai.controll(busyCreeps[i]) }
 }
 
 exports.loop = main;

@@ -1,5 +1,5 @@
-// roles 	= [ 'scaut', 'harvester', 'worker', 'transport', 'old']
-// actions 	= { 'scauting', 'harvest', 'withdraw', 'work', 'pickup', 'transfer', 'idle', 'suicide' }
+// roles 	= [ 'scaut', 'harvester', 'worker', 'transport']
+// actions 	= { 'scauting', 'harvest', 'withdraw', 'work', 'pickup', 'transfer', 'idle', 'renew' }
 // spawnID 		= 'id'
 // targetID 	= 'id'
 // sourceID 	= 'id'
@@ -21,8 +21,6 @@ function harvesterAction(creep) {
 function transportAction(creep) {
 	const resources		= creep.room.find(FIND_DROPPED_RESOURCES)
 	const tombstones	= creep.room.find(FIND_TOMBSTONES)
-	const olds 			= creep.room.find(FIND_MY_CREEPS, 
-							{filter: {memory: {role: 'old'}}})
 
 	if (creep.getFreeCapacity == 0) { // full
 		/*if (creep.room.energyAvailable == energyCapacityAvailable) { // room store full
@@ -38,11 +36,7 @@ function transportAction(creep) {
 		creep.memory.action 	= 'withdraw'
 		creep.memory.targetID 	= tombstones[0].id
 	}
-	else if (olds.length) {
-		creep.memory.action 	= 'idle'
-		creep.memory.targetID 	= olds[0].id
-		creep.moveTo(olds[0])
-	}
+
 	else if (resources.length) {
 		creep.memory.action 	= 'pickup'
 		creep.memory.targetID 	= resources[0].id
@@ -68,12 +62,6 @@ function scautAction(creep) {
 	// In progress... 
 }
 
-function oldAction(creep) {
-		creep.memory.action = 'suicide'
-		creep.memory.sourceID = undefined
-		creep.memory.targetID = creep.memory.spawnID
-}
-
 
 // Controlls
 function scauting(creep) {
@@ -82,7 +70,7 @@ function scauting(creep) {
 
 function harvest(creep) {
 
-	const target = Game.objectById(creep.memory.targetID)
+	const target = Game.getObjectById(creep.memory.targetID)
 
 	if (creep.harvest(target) == ERR_NOT_IN_RANGE) {
 		creep.moveTo(target)
@@ -100,7 +88,7 @@ function withdraw(creep) {
 
 function work(creep) {
 
-	const target = Game.objectById(creep.memory.targetID)
+	const target = Game.getObjectById(creep.memory.targetID)
 
 	if (creep.upgradeController(target) == ERR_NOT_IN_RANGE) {
 		creep.moveTo(target)
@@ -114,7 +102,7 @@ function work(creep) {
 	
 function transfer(creep) {
 	
-	const target = Game.objectById(creep.memory.targetID)
+	const target = Game.getObjectById(creep.memory.targetID)
 
 	if (creep.transfer(target) == ERR_NOT_IN_RANGE) {
 		creep.moveTo(target)
@@ -126,7 +114,22 @@ function transfer(creep) {
 	}
 }
 
-function suicide(creep) {
+function renew(creep) {
+	spawn = Game.getObjectById(creep.memory.spawnID)
+	const path = creep.pos.findPathTo(spawn)
+
+	if (path.length) {
+		creep.moveByPath(path)
+	}
+	else if (creep.ticksToLive < 1000) {
+		spawn.renewCreep(creep)
+	}
+	else {
+		creep.memory.action = 'idle'
+	}
+}
+
+function pickup(argument) {
 	// body...
 }
 
@@ -138,16 +141,29 @@ const controlls = {
 	'work' 		: work,
 	'pickup' 	: pickup,
 	'transfer' 	: transfer,
-	'suicide' 	: suicide
+	'renew' 	: renew
 }
 const actions = {
 	'harvester'	: harvesterAction,
 	'transport'	: transportAction,
 	'worker' 	: workerAction,
-	'scaut' 	: scautAction,
-	'old' 		: oldAction
+	'scaut' 	: scautAction
+}
+
+function getAction(creep) {
+	if (creep.ticksToLive < 200) {
+		creep.memory.action = 'renew'
+		creep.memory.targetID = undefined
+	}
+	else {
+		actions[creep.memory.role](creep)
+	}
+}
+
+function controll(argument) {
+	controlls[creep.memory.action](creep)
 }
 
 
-exports.getAction 	= function(creep) { actions[creep.memory.role](creep) }
-exports.controll 	= function(creep) { controlls[creep.memory.action](creep); };
+exports.getAction 	= getAction;
+exports.controll 	= controll;
