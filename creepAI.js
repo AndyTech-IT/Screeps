@@ -1,9 +1,10 @@
-// roles 	= [ 'scaut', 'harvester', 'worker', 'transport']
-// actions 	= { 'scauting', 'harvest', 'withdraw', 'work', 'pickup', 'transfer', 'idle', 'renew' }
-// spawnID 		= 'id'
-// targetID 	= 'id'
-// sourceID 	= 'id'
-// controllerID	= 'id'
+// roles 	= { 'scaut', 'harvester', 'worker', 'transport'}
+// actions 	= { 'scauting', 'harvest', 'withdraw', 'work', 'pickup', 'transfer', 'renew' }
+
+// rooms 	: { name: { sources; minePoints; range; online; freePoints } }
+// creeps 	: { name: { role; action; targetID; spawnID; controllerID } }
+// controllers : { id : { id; room; creepsCount } }
+
 // partCost   MOVE: 50, WORK: 100, CARRY: 50, ATTACK: 80, RANGED_ATTACK: 150, HEAL: 250, CLAIM: 600, TOUGH: 10 
 
 // Actions
@@ -118,7 +119,7 @@ function renew(creep) {
 	spawn = Game.getObjectById(creep.memory.spawnID)
 	const path = creep.pos.findPathTo(spawn)
 
-	if (path.length) {
+	if (path.length > 1) {
 		creep.moveByPath(path)
 	}
 	else if (creep.ticksToLive < 1000) {
@@ -160,7 +161,7 @@ function getAction(creep) {
 	}
 }
 
-function controll(argument) {
+function controll(creep) {
 	controlls[creep.memory.action](creep)
 }
 
