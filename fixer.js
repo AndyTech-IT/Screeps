@@ -3,13 +3,13 @@
 
 // rooms 	: { name: { sources; minePoints; range; online; freePoints } }
 // creeps 	: { name: { role; action; targetID; spawnID; controllerID } }
-// controllers : { id : { id; room; creepsCount } }
+// controllers : { id; room; creepsCount } }
 
 // partCost   MOVE: 50, WORK: 100, CARRY: 50, ATTACK: 80, RANGED_ATTACK: 150, HEAL: 250, CLAIM: 600, TOUGH: 10 
 
 // claim creep by controller
 function getControll(creep) {
-	let controller = undefiend
+	let controller = undefined
 		for (id in Memory.controllers) {
 			if (!controller || 													// controller is undefined
 				controller.creepsCount > Memory.controllers[id].creepsCount) {	// || creeps > creeps1
@@ -162,7 +162,7 @@ function reboot() {
 
 	for (name in Game.rooms) {
 		if (controller = Game.rooms[name].controller) {
-			Memory.controllers[controller.id] = {
+			Memory.controllers['controller '+name] = {
 				id 		: controller.id,
 				room 	: controller.room,
 				creepsCount : getControllCount(controller.id)
